@@ -1,0 +1,52 @@
+import java.util.Scanner;
+
+class Game {
+    
+    private int rows, cols;  // Numero de linhas e colunas
+    private  char m[][];      // Matriz para representar o estado do jogo
+    
+    Game(int r, int c) {
+	rows = r;
+	cols = c;
+	m = new char[r][c];
+    }
+
+    public void read (Scanner in) {
+	for (int i=0; i<rows; i++)
+	    for(int j=0; j<cols; j++)
+		m[i][j]=in.nextInt();
+    }
+    
+    public void count1() {
+
+	int conta1;
+	for (int i=0; i<rows; i++)
+	    for(int j=0; j<cols; j++)
+		if(m[i][j]%2==1)
+		    conta1++;
+	System.out.println(conta1);
+    }
+
+    public void count2() {
+
+    }
+
+
+}
+public class ED124 {
+    public static void main(String[] args) {
+	
+	Scanner in =new Scanner(System.in);
+	inf f = in.nextInt();
+	int rows = in.nextInt();
+	int cols= in.nextInt();
+
+	Game g = new Game(rows, cols);
+	g.read(in);
+
+	if (f==1)
+	    g.count1;
+	else if (f==2)
+	    g.count2;
+    }
+}

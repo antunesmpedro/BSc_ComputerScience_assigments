@@ -1,0 +1,64 @@
+1.b
+
+As diferenças encontradas foram o tamanho dos pacotes do protocolo ICMP
+- De groucho para SW1, tramas tamanho 98
+- De SW1 para R1, tramas com tamanho 102
+
+Devem ao facto de a ligação entre SW1 e R1 ser uma tagged LAN ou VLAN.
+Ligação está em modo trunk e entrega tramas de VLANS diferentes.
+
+2
+Atribuir IP a terminal VPCS
+ip 10.0.0.4 255.255.255.0
+
+Observa-se host (10.0.0.2) not reachable
+
+Averell distribui um pacote broadcast à procura do 10.0.0.2
+De SW1 para R1 circulam pacotes ARP provenientes de averell. 
+De SW1 para groucho não circula nenhum pacote porque groucho e averell são de vlans diferentes. 
+
+3
+Active o encaminhamento em R1 (deverá ficar activo para todas as restantes perguntas) 
+ip routing
+
+Groucho envia pacotes com destino a Averell
+Quando os pacotes chegam ao comutador, este envia mensagems ICMP
+SW1 ignora os pacotes visto que Groucho e Averell estão em vlans diferentes.
+
+Mesmo com o encaminhamento ativo em R1.
+
+4
+Faça as alterações necessárias para a ligação entre R1 e o terminal linux funcionar em modo trunk, 
+adicionando neste último uma interface na VLAN 10 com o endereço IP 10.0.0.5.
+
+a
+vconfig add ens3 10
+ifconfig ens3 10.0.0.5 netmask 255.255.255.0 up
+
+c ping 172.16.1.1 (Vlan 1)  && ping 10.0.0.1 (Vlan 10)
+Os pacotes para Vlan 1 não são enviados por porta trunk apesar de a mesma poder enviar
+Os pacotes para Vlan 10 são enviados pelo porta trunk
+
+Como a ligação entre R1 e linux está em mode trunk, esta pode receber pacotes de diferentes vlans.
+
+5
+Altere as configurações de SW1 e R1 de modo a que a ligação entre eles fique em modo acesso na VLAN 10
+R1
+	interface f1/0
+	switchport mode access
+	switcport access vlan 10
+	exit
+
+SW1
+
+
+5.a - Verifique que consegue fazer ping do groucho para o harpo, mas não do averell para o joe. (outRes)
+TRUE
+
+
+
+
+
+
+
+

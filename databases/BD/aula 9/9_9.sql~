@@ -1,0 +1,3 @@
+select category.name from category, film where 
+       film.category_id=category.category_id ;
+       

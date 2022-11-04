@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CONNECT FOUR</title>
+<link rel="stylesheet" href="styles.css">
+<script src="game.js"></script>
+</head>
+<body onload="loadGame()">
+	<div class=webpage>
+		<div class=logo>
+			<img
+				src="http://logowiki.net/wp-content/uploads/2017/11/Connect-Four-Logo-1-8403.png"
+				alt="logo">
+		</div>
+		<div class=menu>
+			<div class=login>
+				<form>
+					<div class="container">
+						<label><b>Username</b></label> <input type="text"
+							placeholder="Enter Username" name="uname" required> <label><b>Password</b></label>
+						<input type="password" placeholder="Enter Password" name="psw"
+							required>
+						<button type="submit">Sign In</button>
+						<button type="submit">Sign Up</button>
+					</div>
+				</form>
+			</div>
+			<div class=config>
+				<div>
+					<label><b>Size:</b></label> <select id=columns>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7" selected="selected">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+					</select> <label><b> x </b></label> <select id=rows>
+						<option value="5">5</option>
+						<option value="6" selected="selected">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+					</select>
+				</div>
+				<div>
+
+					<select id=singleOrMulti>
+						<option value="single">Singleplayer</option>
+						<option value="multi">Multiplayer</option>
+					</select>
+				</div>
+				<div>
+					<label><b>First player:</b></label> <select id=firstplayer>
+						<option value="2">Player 2</option>
+						<option value="1" selected="selected">Player 1</option>
+					</select>
+				</div>
+				<div>
+					<label for="ailevel"><b>AI level:</b></label> <select id="ailevel">
+						<option value="3" selected="selected">3</option>
+						<option value="6">6</option>
+						<option value="9">9</option>
+					</select>
+				</div>
+				<div class="buttons">
+					<div>
+						<button type="submit" id="start">Start!</button>
+						<button type="reset" id="reset" onclick="resetGame()">Reset</button>
+					</div>
+					<div>
+						<button type="button" onclick="loadStats()">Stats</button>
+						<button type="button"
+							onClick="document.getElementById('instructions').scrollIntoView();">Instructions</button>
+					</div>
+				</div>
+			</div>
+			<div class="statsdiv" id="statsdiv">
+				<label><b>Singleplayer</b></label> <br>
+				<label id="sp1" id="count">Player 1:</label>
+				<label id="sp2" id="count">Player 2:</label>
+				<label id="sd"id="count">Draw:</label>
+				<label><b>Multiplayer</b></label>
+				<label id="mp1" id="count">Player 1:</label>
+				<label id="mp2"  id="count">Player 2:</label>
+				<label id="md" id="count">Draw:</label>
+			</div>
+		</div>
+		<div class=message>
+			<label id=message>Player: 1 Message: Nothing to show</label>
+		</div>
+		<div class=board id=board>
+			<div class=base id=base></div>
+		</div>
+
+		<div class=instructions id=instructions>
+			<h2>How to Play ?</h2>
+			<p>Select the settings on menu and press start!</p>
+			<p>You can reset the game any time you want but it grants you a
+				lose!</p>
+			<p>Have fun!</p>
+			<h2>About:</h2>
+			<p>Connect Four is a two-player connection game in which the
+				players first choose a color and then take turns dropping one
+				colored disc from the top into a seven-column, six-row vertically
+				suspended grid.
+			<p>The pieces fall straight down, occupying the lowest available
+				space within the column.</p>
+			<p>The objective of the game is to be the first to form a
+				horizontal, vertical, or diagonal line of four of one's own discs.
+				Connect Four is a solved game.</p>
+			<p>The first player can always win by playing the right moves.</p>
+		</div>
+	</div>
+</body>
+</html>

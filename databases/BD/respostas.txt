@@ -1,0 +1,50 @@
+AULA 6
+1: SELECT name FROM category WHERE (name BETWEEN 'S' AND 'T') ORDER BY name;
+2: SELECT first_name, last_name FROM actor ORDER BY first_name, last_name;
+3: select distinct title from (film natural join inventory natural join rental) where customer_id = 258 ORDER BY title asc;
+or
+select title from film natural join inventory where inventory_id in (select inventory_id from rental where customer_id = 258) order by 1 asc;
+4:select title from (film natural join film_actor natural join actor) where first_name = "HARRISON" and last_name = "BALE";
+or
+select title from (film natural join film_actor) where actor_id in (select actor_id from actor where (first_name = "HARRISON" and last_name = "BALE"));
+5: SELECT first_name,last_name FROM customer WHERE customer_id IN (SELECT DISTINCT customer_id FROM customer NATURAL JOIN rental WHERE return_date IS NULL) ORDER BY 1,2;
+6: SELECT E.first_name, E.last_name, M.first_name, M.last_name FROM staff as E join store as S on E.store_id = S.store_id, staff as M WHERE S.manager in (select staff_id from staff where S.manager = M.staff_id) ORDER BY 1,2;
+7: SELECT first_name, last_name FROM  actor WHERE actor_id in (SELECT DISTINCT actor_id FROM actor NATURAL JOIN film_actor WHERE film_id in (SELECT film_id FROM film NATURAL JOIN category WHERE name = "Drama")) ORDER BY first_name,last_name;
+8:UPDATE customer SET phone = '351212212212' WHERE first_name = "KAREN" AND last_name = "JACKSON";
+9:INSERT INTO inventory (film_id,store_id) VALUES ((SELECT film_id FROM film WHERE title = "EYES DRIVING"),1);
+10:DELETE FROM payment WHERE customer_id in (SELECT customer_id FROM customer WHERE first_name = "LISA" AND last_name = "ANDERSON");
+AULA 7
+1: SELECT first_name, last_name FROM customer  UNION ALL (SELECT first_name, last_name FROM staff) ORDER BY first_name, last_name;
+2: SELECT title FROM film WHERE length IN (SELECT MAX(length) FROM film) ORDER BY title;
+3: SELECT DISTINCT title FROM film NATURAL JOIN inventory NATURAL JOIN rental WHERE title NOT IN (SELECT title FROM film NATURAL JOIN inventory NATURAL JOIN rental WHERE customer_id IN (SELECT customer_id FROM customer WHERE first_name = "LEE" AND last_name = "HAWKS")) ORDER BY title;
+4: SELECT title FROM film WHERE title NOT IN(SELECT title FROM film NATURAL JOIN film_actor NATURAL JOIN actor) ORDER BY title;
+5: SELECT DISTINCT title FROM film NATURAL JOIN inventory WHERE title NOT IN(SELECT title FROM film NATURAL JOIN inventory NATURAL JOIN rental) ORDER BY title;
+6: SELECT first_name,last_name FROM customer WHERE ((SELECT COUNT(*) FROM category WHERE category_id IN (SELECT category_id FROM film NATURAL JOIN inventory)) = (SELECT COUNT(DISTINCT category_id) FROM film NATURAL JOIN inventory NATURAL JOIN rental WHERE rental.customer_id = customer.customer_id)) ORDER BY 1 ASC, 2 ASC;
+7:SELECT first_name,last_name FROM actor as a WHERE ((SELECT COUNT(*) FROM category WHERE category_id IN (SELECT category_id FROM film NATURAL JOIN category)) = (SELECT COUNT(DISTINCT category_id) FROM actor as b NATURAL JOIN film_actor NATURAL JOIN film NATURAL JOIN category GROUP BY actor_id HAVING a.actor_id = b.actor_id)) ORDER BY 1 ASC, 2 ASC;
+
+
+AULA 8
+1 : SELECT country, SUM(num) FROM (SELECT store.country, 1 as num FROM staff,store WHERE staff.store_id = store.store_id UNION ALL SELECT country, 0 FROM store WHERE store_id NOT IN (SELECT store_id FROM staff)) AS Temp GROUP BY country ORDER BY country ASC;
+2:SELECT title,SUM(num) FROM (SELECT film.title, 1 as num FROM film,inventory WHERE film.film_id = inventory.film_id UNION ALL SELECT title, 0 FROM film WHERE film_id NOT IN(SELECT film_id FROM inventory)) AS Temp GROUP BY title ORDER BY title ASC;
+3: SELECT title FROM film NATURAL JOIN inventory NATURAL JOIN rental WHERE film_id IN (SELECT film_id FROM film NATURAL JOIN film_actor NATURAL JOIN actor WHERE first_name = 'HARRISON' AND last_name = 'BALE') GROUP BY film_id HAVING COUNT(*) > 20 ORDER BY 1 ASC;
+4: SELECT title FROM film NATURAL JOIN inventory GROUP BY title HAVING COUNT(*) = (SELECT COUNT(*) FROM film NATURAL JOIN inventory GROUP BY title ORDER BY 1 DESC LIMIT 1);
+5:SELECT first_name, last_name FROM customer WHERE customer_id IN (SELECT customer_id FROM customer NATURAL JOIN rental NATURAL JOIN inventory NATURAL JOIN film WHERE return_date > rent_date + rental_duration or (return_date is null and datediff(now(),rent_date) > rental_duration)) ORDER BY 1,2;
+6:
+
+AULA 9
+1:SELECT title FROM film NATURAL JOIN category WHERE name = 'Sports';
+2:SELECT first_name, last_name FROM film NATURAL JOIN film_actor NATURAL JOIN actor WHERE title = 'WYOMING STORM' ORDER BY 1,2 ASC;
+3:SELECT first_name, last_name FROM actor WHERE actor_id IN (SELECT DISTINCT actor_id FROM category NATURAL JOIN film NATURAL JOIN film_actor NATURAL JOIN actor WHERE name = 'Drama') ORDER BY 1,2 ASC;
+4:SELECT DISTINCT title FROM film NATURAL JOIN inventory NATURAL JOIN store WHERE store_id = 1 AND title NOT IN (SELECT title FROM film NATURAL JOIN inventory NATURAL JOIN store WHERE store_id <> 1) ORDER BY 1 ASC;
+5:SELECT DISTINCT first_name,last_name FROM actor NATURAL JOIN film_actor NATURAL JOIN film WHERE !(first_name='JULIA' and last_name='ZELLWEGER') and title IN (SELECT title FROM film NATURAL JOIN film_actor NATURAL JOIN actor WHERE first_name = 'JULIA' AND last_name='ZELLWEGER') ORDER BY 1,2 ASC;
+6: SELECT COUNT(*) FROM (SELECT DISTINCT actor_id FROM actor NATURAL JOIN film_actor NATURAL JOIN film NATURAL JOIN category WHERE name = 'Action') as Temp;
+7: SELECT DISTINCT first_name, last_name FROM customer as c WHERE customer_id IN (SELECT customer_id FROM rental NATURAL JOIN inventory NATURAL JOIN store WHERE country = c.country) ORDER BY first_name,last_name ASC;
+ou
+SELECT first_name,last_name FROM customer WHERE customer_id IN(SELECT DISTINCT customer_id FROM inventory NATURAL JOIN rental NATURAL JOIN customer,store WHERE store.country = customer.country) ORDER BY 1,2 ASC;
+8:SELECT name, AVG(length) FROM (SELECT name, length FROM category NATURAL JOIN film UNION ALL SELECT name, 0 FROM category WHERE category_id NOT IN(SELECT category_id FROM category NATURAL JOIN film)) AS Temp GROUP BY name ORDER BY 1 ASC;
+9:SELECT name FROM category NATURAL JOIN film GROUP BY category_id HAVING COUNT(*) = (SELECT COUNT(*) FROM category NATURAL JOIN film GROUP BY category_id ORDER BY 1 DESC LIMIT 1) ORDER BY 1;
+10:SELECT first_name, last_name FROM film NATURAL JOIN inventory NATURAL JOIN rental NATURAL LEFT JOIN customer GROUP BY customer_id HAVING SUM(length) = (SELECT SUM(length) FROM film NATURAL JOIN inventory NATURAL JOIN rental NATURAL LEFT JOIN customer GROUP BY first_name, last_name ORDER BY 1 DESC LIMIT 1) ORDER BY 1,2;
+
+
+
+

@@ -1,0 +1,19 @@
+import java.util.Stack;
+
+
+public class parentisis {
+    /*
+
+    public void balanced(String s) {
+
+    }
+
+    */
+
+    public void class main(String args[]) {
+
+	
+	Stack <Character> balance = new Stack<Character>("([()])");
+	System.out.println(balance);
+    }
+}

@@ -1,0 +1,2 @@
+SELECT category.name FROM film, category WHERE 
+film.category_id=category.category_id GROUP BY category.category_id HAVING COUNT(film.film_id)=(SELECT COUNT(film.film_id) FROM film, category WHERE film.category_id=category.category_id GROUP BY category.category_id ORDER BY 1 DESC LIMIT 1);

@@ -1,0 +1,80 @@
+t3 - VLAN & SNMP
+
+
+Configurar Linux
+	Ficheiro /etc/sysconfig/network-scripts/ifcfg-ens3
+	(ADD) 	IPADDR=172.16.1.2
+			BOOTPROTO=static
+			NETMASK=255.255.255.0
+			VLAN=yes
+
+No terminal linux deve ter o reenvio de pacotes desactivado
+	Ficheiro /etc/sysctl.conf 
+	(ADD)	net.ipv4.ip_forward = 0
+
+	(COMMAND)
+		ifdown ens3
+		ifup ens3
+
+Já Configurado (groucho) (vlan 20)
+Já Configurado (averell) (vlan 10)
+
+Configurar f1/2 (joe) (vlan 20)
+
+	interface f1/2
+	switchport mode access
+	switchport access vlan 20
+	exit
+
+	interface vlan 20
+	ip address 172.20.0.1 255.255.255.0
+	no shutdown
+	exit
+
+Configurar f1/1 (harpo) (vlan 10)
+	
+	interface f1/1 
+	switchport mode access
+	switchport access vlan 10
+	exit
+
+	interface vlan 10
+	ip address 10.0.0.1 255.255.255.0
+	no shutdown
+	exit
+
+Configurar f1/0 trunk
+	interface f1/0 
+	switchport trunk encapsulation dot1q
+	switchport mode trunk
+	switchport trunk allowed vlan 1,10,20,1002.1005
+	exit
+	no shutdown
+	exit 
+
+Remover Routing R1
+	enable
+	conf t
+	no ip routing
+	no shutdown
+
+---SNMP
+
+
+
+Cisco Access Configuration
+
+	! set the read-only community name to MyPublicCommunityName
+	snmp-server community public RO 
+
+	! set the read-write community name to MyPrivateCommunityName
+	snmp-server community private RW
+
+
+//////////////////////////////////////
+	Estado Inicial
+		TRUE - Ping de groucho para o harpo e para a "interface" vlan 10 de R1.
+		TRUE - Ping do averell para o joe e para a "interface" vlan 20 de R1.
+		TRUE - Ping do linux para a "interface" vlan 1 de R1.
+		TRUE - Ping FALHA de (groucho e harpo) para (averell e joe).
+////////////////////////////////////////

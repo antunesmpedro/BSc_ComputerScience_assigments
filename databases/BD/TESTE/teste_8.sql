@@ -1,0 +1,1 @@
+select first_name, last_name from(select first_name, last_name, SUM(amount) as T from customer INNER JOIN payment on customer.customer_id=payment.customer_id group by 1,2 having T > 50 order by 3 DESC) A order by 1,2;

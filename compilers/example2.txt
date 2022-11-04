@@ -1,0 +1,28 @@
+int main() {
+
+x = 2;
+
+
+if (x>5) {
+printf(5);
+}
+else {
+x = 3;
+}
+
+if (x>5) {
+printf(5);
+}
+else {
+x = 3;
+}
+
+while (4>2) {
+printf(x);
+}
+
+for(i=0; i<2; i = i+1) {
+	x=2;
+}
+
+}

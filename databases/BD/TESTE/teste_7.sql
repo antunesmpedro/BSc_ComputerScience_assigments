@@ -1,0 +1,1 @@
+select distinct inventory.inventory_id from inventory left join rental on inventory.inventory_id=rental.inventory_id where inventory.inventory_id not in(select distinct rental.inventory_id from inventory right join rental on rental.inventory_id=inventory.inventory_id) order by 1;

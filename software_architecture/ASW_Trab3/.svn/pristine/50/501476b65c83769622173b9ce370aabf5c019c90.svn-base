@@ -1,0 +1,26 @@
+package sonc.client;
+
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
+
+public class CommandPanel {
+	final FlowPanel commandPanel = new FlowPanel();
+	
+	public CommandPanel(final SoncServiceAsync soncService) {
+		this.commandPanel.setSize("100%", "400px");
+		this.commandPanel.setStyleName("commandPanel");
+		
+		Button updatePasswordButton = new Button("Update Password");
+		updatePasswordButton.setSize("100%", "100px");
+		Button compileButton = new Button("Compile");
+		compileButton.setSize("100%", "100px");
+		Button getCodeButton = new Button("Get Code");
+		getCodeButton.setSize("100%", "100px");
+		Button logoutButton = new Button("Logout");
+		logoutButton.setSize("100%", "100px");
+		this.commandPanel.add(updatePasswordButton);
+		this.commandPanel.add(compileButton);
+		this.commandPanel.add(getCodeButton);
+		this.commandPanel.add(logoutButton);
+	}
+}

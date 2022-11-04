@@ -1,0 +1,453 @@
+#include <iostream>
+#include <cstdio>
+#include <limits.h>
+#include <algorithm>
+#include <stdlib.h>
+#include <string.h>
+
+using namespace std;
+
+// Matrix declaration
+//const int 6= 6;
+//const int 7 = 7;
+
+
+typedef struct Node{	
+  char matrix[6][7];
+  int depth;
+  int utility;
+  int play;
+}Node;
+
+int j_seg= -1;
+int test;
+char gameMatrix[6][7];
+
+void iniciar_prog(){
+	for(int i = 0; i < 6; i++){
+    for(int j = 0; j < 7; j++){
+      gameMatrix[i][j] = '-';
+    }
+  }
+}
+
+int valor_max(Node *estado);
+
+Node * makeNode(char matrix[][7], int depth, int utility, int play){
+	Node *node = (Node*)malloc(sizeof(Node));
+	memcpy(node->matrix,matrix,42*sizeof(char));
+	node->depth = depth;
+	node->utility = utility;
+	node->play = play;
+	return node;
+}
+void printMatrix(Node *estado) {
+	cout<<endl;
+	for(int i=0; i<6; i++) {
+		printf("%d", i+1);
+		for(int j=0; j<7; j++) {
+			cout<<estado->matrix[i][j];
+		}
+		cout<<endl;
+	}
+	printf(" 1234567\n");
+	cout<<endl;
+}
+
+/*void makeMove(char play, int move) {
+	for(int i=6-1; i > -1; i--) {
+		if(matrix[i][move] == '-') {
+			matrix[i][move] = play;
+			break;
+		}
+	}
+
+}*/
+
+bool validMove(Node *estado, int move) {
+	if(move < 1 || move > 7)
+		return false;
+	else if(estado->matrix[0][move-1] != '-')
+		return false;
+	else return true;
+}
+
+int horizontal(Node *estado,int x,int y){
+  int x_num=0,o_num=0,casa_num=0;
+  for(int i=y;i<y+4;i++){
+    if(i<7){
+      if(estado->matrix[x][i] == 'X')
+        x_num++;
+      else if(estado->matrix[x][i] == 'O')
+        o_num++;
+      casa_num++;
+    }
+  }
+  if(casa_num == 4){
+    if(x_num == 0 && o_num!=0){
+      if(o_num == 1)
+        return -1;
+      else if(o_num == 2)
+        return -10;
+      else if(o_num == 3)
+        return -50;
+    }
+    else if(o_num == 0 && x_num!=0){
+    if(x_num == 1)
+      return 1;
+    else if(x_num == 2)
+      return 10;
+    else if(x_num == 3)
+      return 50;
+    }
+  }
+  else
+    return 0;
+}
+
+int vertical(Node *estado,int x,int y){
+  int x_num=0,o_num=0,casa_num=0;
+  for(int i=x;i<x+4;i++){
+    if(i<6){
+      if(estado->matrix[i][y] == 'X')
+        x_num++;
+      else if(estado->matrix[i][y] == 'O')
+        o_num++;
+      casa_num++;
+    }
+  }
+  if(casa_num == 4){
+    if(x_num == 0 && o_num!=0){
+      if(o_num == 1)
+        return -1;
+      else if(o_num == 2)
+        return -10;
+      else if(o_num == 3)
+        return -50;
+    }
+    else if(o_num == 0 && x_num!=0){
+      if(x_num == 1)
+        return 1;
+      else if(x_num == 2)
+        return 10;
+      else if(x_num == 3)
+        return 50;
+    }
+  }
+  else
+    return 0;
+}
+
+int diagonal(Node *estado,int x,int y){
+  int x_num=0,o_num=0,casa_num=0;
+  for(int i=y;i<y+4;i++){
+    if(i<7 && x<6){
+      if(estado->matrix[x][i] == 'X')
+        x_num++;
+      else if(estado->matrix[x][i] == 'O')
+        o_num++;
+      casa_num++;
+    }
+    x++;
+  }
+  if(casa_num == 4){
+    if(x_num == 0 && o_num!=0){
+      if(o_num == 1)
+        return -1;
+      else if(o_num == 2)
+        return -10;
+      else if(o_num == 3)
+        return -50;
+    }
+    else if(o_num == 0 && x_num!=0){
+      if(x_num == 1)
+        return 1;
+      else if(x_num == 2)
+        return 10;
+      else if(x_num == 3)
+        return 50;
+    }
+  }
+  else
+    return 0;
+}
+
+int diagonal2(Node *estado,int x,int y){
+  int x_num=0,o_num=0,casa_num=0;
+  for(int i=y;i>y-4;i--){
+    if(i>=0 && x<6){
+      if(estado->matrix[x][i] == 'X')
+        x_num++;
+      else if(estado->matrix[x][i] == 'O')
+        o_num++;
+      casa_num++;
+    }
+    x++;
+  }
+  if(casa_num == 4){
+    if(x_num == 0 && o_num!=0){
+      if(o_num == 1)
+        return -1;
+      else if(o_num == 2)
+        return -10;
+      else if(o_num == 3)
+        return -50;
+    }
+    else if(o_num == 0 && x_num!=0){
+      if(x_num == 1)
+        return 1;
+      else if(x_num == 2)
+        return 10;
+      else if(x_num == 3)
+        return 50;
+    }
+  }
+  else
+    return 0;
+}
+
+int checkWin(Node *estado, int x, int y) {
+	int x_num=0,o_num=0;
+	for(int i=y;i<y+4;i++){
+	    if(i<7){
+	      	if(estado->matrix[x][i] == 'X')
+	        	x_num++;
+	      	else if(estado->matrix[x][i] == 'O')
+	        	o_num++;
+			if(x_num == 4)
+				return 512;
+			else if(o_num == 4)
+			    return -512;
+			}
+	}
+	x_num=0;
+	o_num =0;
+  //vertical
+	for(int i=x;i<x+4;i++){
+	    if(i<6){
+	      	if(estado->matrix[i][y] == 'X')
+	        	x_num++;
+	      	else if(estado->matrix[i][y] == 'O')
+	        	o_num++;
+	  		if(x_num == 4)
+	    		return 512;
+	  		else if(o_num == 4)
+	    		return -512;
+	    }
+	}
+	x_num=0;
+	o_num =0;
+
+	for(int i=y;i<y+4;i++){
+    	if(i<7 && x<6){
+      		if(estado->matrix[x][i] == 'X')
+        		x_num++;
+      		else if(estado->matrix[x][i] == 'O')
+        		o_num++;
+    
+		  	if(x_num == 4)
+		    	return 512;
+		  	else if(o_num == 4)
+		    	return -512;
+		}
+		x++;
+	}
+	x_num=0;
+	o_num =0;
+
+	for(int i=y;i>y-4;i--){
+    	if(i>=0 && x<6){
+      		if(estado->matrix[x][i] == 'X')
+        		x_num++;
+      		else if(estado->matrix[x][i] == 'O')
+       			o_num++;
+			if(x_num == 4)
+			    return 512;
+			else if(o_num == 4)
+			    return -512;
+		}
+    	x++;
+  	}
+  	return 0;
+}
+int win_state(Node *estado){
+  int v;
+  for(int i=0;i<6;i++){
+    for(int j=0;j<7;j++){
+      if((v=checkWin(estado,i,j)) != 0)     return v;
+    }
+  }
+  return 0;
+}
+bool fim_jogo(Node * estado){
+	for(int j=0;j<7;j++){
+    if(estado->matrix[0][j] == '-')
+      return false;
+  }
+  return true;
+}
+
+int terminal_test(Node *estado){
+  int v;
+  if((v=win_state(estado)) != 0){
+    return v;               //vai retornar -512 ou 512
+  }
+  else if(fim_jogo(estado)){
+    return 0;                       //retorna empate(0)
+  }
+  else if(estado->depth >= 7){
+    return 1;                       //retorna código para chamar a utility
+  }
+  else{
+    return -1;                      //retorna que o estado atual nao é terminal
+  }
+}
+int utility(Node *estado){
+  int utility_val = 0;
+  for(int i=0;i<6;i++){
+    for(int j=0;j<7;j++){
+      int hor = horizontal(estado,i,j);
+      int ver = vertical(estado,i,j);
+      int dia = diagonal(estado,i,j);
+      int dia2 = diagonal2(estado,i,j);
+      utility_val+= hor + ver + dia + dia2;
+    }
+  }
+  return utility_val;
+}
+
+int valor_min(Node *estado){
+  int val = terminal_test(estado);
+  if(val != -1){
+    if(val == 1){
+      int u = utility(estado);
+      return u;
+    }
+    else
+      return val;
+  }
+  int v = INT_MAX;
+  for(int j = 6; j >= 0; j--){
+    for(int i = 5; i >= 0; i--){
+      Node *descendant = makeNode(estado->matrix, estado->depth + 1, 0, j);
+      if(estado->matrix[i][j] == '-'){
+  	      descendant->matrix[i][j] = 'O';
+          v = min(v, valor_max(descendant));
+          break;
+      }
+    }
+  }
+  return v;
+}
+int valor_max(Node *estado){
+	int val = terminal_test(estado);
+	if(val != -1){
+		if(val == 1){
+			int u = utility(estado);
+			return u;
+		}
+		else
+			return val;
+	}
+	int v = INT_MIN;
+	for(int j = 6; j >= 0; j--){
+		for(int i = 5; i >= 0; i--){
+			Node *descendant = makeNode(estado->matrix, estado->depth + 1, 0, j);
+			if(estado->matrix[i][j] == '-'){
+				descendant->matrix[i][j] = 'X';
+				int new_v;
+				new_v = max(v, valor_min(descendant));
+				if(v != new_v){
+					descendant->utility = new_v;
+					v=new_v;
+					test=new_v;
+					if(descendant->depth == 1){
+						j_seg = descendant->play;
+					}
+				}
+				break;
+			}
+		}
+	}
+    return v;
+}
+void AIPlayer(Node *estado){
+	int a;
+	a = valor_max(estado);
+}
+
+Node* modi_estado(Node *estado, int play, char player){
+	for(int i = 5; i >= 0; i--){
+    if(estado->matrix[i][play] == '-'){
+      estado->matrix[i][play] = player;
+      break;
+    }
+  }
+  return estado;
+}
+
+int main() {
+	int play, v;
+	char starter;
+
+  //Initialize matrix
+
+	iniciar_prog();
+	Node *estado= makeNode(gameMatrix, 0,0 ,-1);
+	//printMatrix(estado);
+  //P1 plays, then P2 plays
+  //P1 = human , P2 = AI
+	printf("Escolha o primeiro a jogar, 'A' para IA (minimax), 'H' se quiser ser o primeiro.\n");
+	scanf("%c", &starter);
+	if(starter == 'H'){
+		printf("Seleciona a linha que queres jogar (1-7):\n");
+		cin >> play;
+		if(validMove(estado,play)){
+			estado = modi_estado(estado, play-1, 'O');
+			printMatrix(estado);
+		}
+		else {
+		cout << "\n*** Invalid move ***\n";
+		printMatrix(estado);
+		cin>>play;
+		}
+	}
+
+	while(true) {
+    //P2 Time
+		cout<<"Its Player 2 turn.\nAI thinking ...\n";
+		AIPlayer(estado);
+		estado = modi_estado(estado, j_seg, 'X');
+		printMatrix(estado);
+		v = terminal_test(estado);
+	    if(v == 512){
+	      printf("AI ganhou.\n");
+	      break;
+	    }
+	    else if(v == 0){
+	      printf("Empate.\n");
+	      break;
+	    }
+	    printf("Seleciona a linha que queres jogar (1-7):\n");
+		cin >> play;
+		if(!validMove(estado, play)){
+			cout << "\n*** Invalid move ***\n";
+			cin >> play;
+		}
+		estado = modi_estado(estado, play-1, 'O');
+		printMatrix(estado);
+		v= terminal_test(estado);
+		if(v == -512){
+	      printf("Parabéns, ganhou o jogo!.\n");
+	      break;
+	    	}
+	    else if(v == 0){
+	      printf("Empate.\n");
+	      break;
+		//play = AIPlayer();
+		//makeMove('X',play-1);
+		}
+	}
+  // GIVES WINNER;
+	return 0;
+}

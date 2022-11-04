@@ -1,0 +1,17 @@
+
+CONNECT_4 EM C++
+
+
+Implementação de algoritmos(minimax) de buscas com adversários, e 
+Implementação de cortes(alpha_beta) nas arvores de procura elevando a eficiencia e reduzindo o tempo de jogada.
+
+Compilar: g++ minimax.cpp -o minimax
+	  g++ alpha_beta.cpp -o alpha_beta
+
+Executar: ./minimax
+	  ./alpha_beta
+
+Output:
+Vai ter que inserir, qual será o primeiro jogador a jogar ('H' para voce!) e
+ 		     a linha que quer jogar em cada jogada que tenha...!
+ 

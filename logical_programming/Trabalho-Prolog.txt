@@ -1,0 +1,62 @@
+Trabalho Prolog 
+Elaborado por: 
+Pedro Antunes - 201507254 
+Rafael Novais - 201508010
+
+
+%% Text2poly
+Função que recebe String, faz o split, faz o parse da string pela dcg e retorna o comando numa lista de palavras
+
+text2poly(S,P).
+
+text2poly("multiply zero plus three squared by nine minus x as P1",X).
+X = [multiply, 0+3^2, 9-x, [as, "P1"]].
+
+S = "show zero minus three squared"
+S = "show x plus y squared"
+S = "simplify zero minus three squared"
+S = "add zero plus three squared with three minus x"
+S = "multiply zero plus three squared by nine minus x"
+S = "bye"
+S = "show  "P1""
+S = "forget "P2""
+S = "show zero squared as P2"
+S = "show zero x squared"
+S = "show zero x raise zero as P1"
+
+
+Implementamos uma DCG que aceita os commandos: 
+	-bye, 
+	-show Poly
+	-show P1(local Variables),
+	-show local storage,
+	-simplify Poly
+	-add Poly with Poly2
+	-multiply Poly with Poly2
+	-forget Poly
+	-as P1 (aceita mas não está implementado no polyplay)
+
+O output, é uma lista, e pode ser 3 tipos:
+	- Apenas 1 commando Ex: [bye]
+	- 1 Commando e 1 polynomio: Ex: [simplify, 2*x^5 + 5*x^5]
+	- 1 commando e 2 polinomios: Ex: [add, 2*x^5, 5*x^5]
+
+Esta função é utilizada no polyplay.
+
+%% PolyPlay.
+O polyplay começa por fazer scan de um commando, passa esse comando ao text2poly que faz o parse que é enviado para o aux_play.
+A função aux_play tem como objectivo executar os commandos. Primeiramente, encaixa na lista qual é o commando, e de seguida continua por 
+executar as instruções relativas a esse comando.
+
+!! - Devido ao facto de o nosso trabalho 1 ter alguns problemas no que toca a sinais, alguns comandos podem não estar completamente
+funcionais, por exemplo o multiply. também não conseguimos implementar o storage de variaveis, mas a dcg faz o parse na mesma dos comandos.
+
+!! - Devido ao facto de a dcg implementar alguns parentesis ao realizar o parse para polinomios podem ocorrer alguns bugs devido à existencia ou falta dos mesmos.
+
+Alguns comandos:
+
+add two with two x
+multiply two plus three squared by one minus x
+show one plus three minus x squared
+show one plus three minus x raise two
+

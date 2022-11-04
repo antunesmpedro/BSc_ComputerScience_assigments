@@ -1,0 +1,13 @@
+
+
+
+reset;
+model p6_ex3.mod;
+data p6_ex3.dat;
+
+option solver gurobi;
+
+solve;
+
+printf "\n" >p6_ex3.sol;
+printf "%g\n", z >trabalho02A.sol;

@@ -1,0 +1,9 @@
+
+// Uma classe muito simples
+
+// O ficheiro tem de ter o mesmo nome da classe + a extensão '.java'
+public class Echo {
+    public static void main(String[] args) {
+        System.out.println("Numero de argumentos: " + args.length);
+    }
+}

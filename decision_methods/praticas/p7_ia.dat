@@ -1,0 +1,17 @@
+data;
+
+set V := A B C D E F;
+
+set E :=
+	(B,A)
+	(B,E)
+	(B,C)
+	(A,E)
+	(A,D)
+	(C,D)
+	(C,F)
+	(D,E)
+	(D,F)
+	(E,F);
+
+end;

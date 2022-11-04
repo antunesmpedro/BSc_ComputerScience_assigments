@@ -1,0 +1,36 @@
+package sonc.client;
+
+import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
+
+public class ASW_Trab3 implements EntryPoint {
+
+	/**
+	 * Create a remote service proxy to talk to the server-side Greeting service.
+	 */
+	private final SoncServiceAsync soncService = GWT.create(SoncService.class);
+	
+	public void onModuleLoad() {
+		
+		Panel divA = RootPanel.get("divA");
+		Panel divE = RootPanel.get("divE");
+		Panel divC = RootPanel.get("divC");
+		Panel body = RootPanel.get();
+		
+		AuthenticatorPanel panelA = new AuthenticatorPanel(soncService, body, divE);
+		divA.add(panelA.authenticatorPanel);
+		
+		// Definition Panel Editor of Code
+		TextArea editor = new TextArea();
+		editor.setStyleName("editor");
+		editor.setVisible(true);
+		divE.add(editor);
+		
+		CommandPanel panelC = new CommandPanel(soncService);
+		divC.add(panelC.commandPanel);
+	}
+}

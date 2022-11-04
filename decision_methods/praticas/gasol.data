@@ -1,0 +1,6 @@
+set N := 1 2 3;      # gasolinas
+
+param:    	venda  	compra  	min_octanas	max_enxofre	octanas 	enxofre :=       # petroleos do modelo:
+  1    		70   		45     	10           1 				12			0.5
+  2  		60    		35     	8          	 2				6			2
+  3			50			25		6			 1				8			3   ;

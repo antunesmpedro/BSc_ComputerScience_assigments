@@ -1,0 +1,10 @@
+data;
+
+
+param: Trabalhos: duracao	data_entrega	penalizacao :=
+1		   			4			4				4
+2		   			5			2				5
+3		   			2			13				7
+4		   			3			8				2      ;
+
+end;

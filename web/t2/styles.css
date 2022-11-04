@@ -1,0 +1,148 @@
+@charset "UTF-8";
+
+body {
+	background-color: #5fa3e8;
+	text-align: center;
+	font-family: Helvetica, Arial, Helvetica, sans-serif;
+}
+
+img {
+	width: 450px;
+	height: auto;
+}
+
+label {
+	margin: 5px 5px 5px 5px;
+}
+
+button {
+	margin: 5px 5px 5px 5px;
+}
+
+select {
+	margin: 5px 5px 5px 5px;
+}
+
+p {
+	text-align: center;
+}
+.webpage {
+	width: 1300px;
+	margin: auto;
+}
+
+.menu {
+	border: 5px solid grey;
+	width: 200px;
+	float: right;
+	background-color: #bac8d6;
+	margin: 20px 20px 20px 20px;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 20px;
+	right: 50px;
+	border-radius: 3%;
+}
+
+.buttons {
+	padding-top: 10px;
+}
+
+.config {
+	border: 2px solid grey;
+	padding-top: 10px;
+}
+
+.logo {
+	width: 400px;
+	margin: auto;
+}
+
+.login {
+	border: 2px solid grey;
+	padding-top: 10px;
+}
+
+.instructions {
+	margin: 20px 263px 20px 20px;
+	text-align: center;
+}
+
+.message {
+	visibility: hidden;
+	margin-top: 20px;
+	top: 20px;	
+	font-family: "Arial Black", Gadget, sans-serif;
+	font-size: 33px;
+	font-weight: 700;
+}
+.loginstatus {
+	margin-bottom: 200px;
+	top: 20px;	
+	font-family: "Arial Black", Gadget, sans-serif;
+	font-weight: 500;
+	border: 2px solid white;
+	border-radius: 10%;
+}
+
+#logoutbt {
+	visibility: hidden;
+}
+
+.statsdiv {
+	border: 2px solid grey;
+	height: 180px;
+	display: none;
+	float:left;
+}
+#count {
+	display: block;
+	text-align: left;
+}
+
+.board {
+	visibility: hidden;
+	width: 200px;
+	height: 0px;
+	background-color: #1C49BC;
+	margin: 20px 20px 20px 20px;
+	border: 8px solid grey;
+	border-radius: 3%;
+}
+
+#base div {
+	background-color: white;
+	border: 1px solid grey;
+	box-sizing: border-box;
+	float: left;
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+}
+
+#base div:hover {
+	background-color: white;
+	opacity: 0.8;
+}
+
+#base {
+	margin: auto;
+}
+
+canvas #searching_game {
+    width: 100px;
+    height: 65px;
+    visibility: hidden;
+    position: absolute; 
+    top: 15%;
+    left: 25%;
+}
+
+canvas #game_started {
+    width: 200px;
+    height: 75px;
+    visibility: hidden;
+    position: absolute; /* to overlap */
+    top: 15%;
+    left: 15%;
+}

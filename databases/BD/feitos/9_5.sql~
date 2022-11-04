@@ -1,0 +1,4 @@
+select first_name, last_name from actor natural join film_actor where 
+       actor.first_name ="JULIA" and
+       actor.last_name ="ZELLWEGER" and 
+       actor_id not in (select actor_id from actor where first_name ="JULIA" and last_name ="ZELLWEGER") order by 1,2;

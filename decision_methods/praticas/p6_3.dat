@@ -1,0 +1,6 @@
+set N := 1 2 3;      # gasolinas
+
+param:    	custo_const  	custo_ton  	tone_remov_1	tone_remov_2 :=       # petroleos do modelo:
+  1    		100000   		20     	         0.4 			0.3	
+  2  		60000   		30     	         0.25			0.2		
+  3			40000			40				 0.2			0.25  ;

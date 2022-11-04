@@ -1,0 +1,52 @@
+
+
+
+reset;
+model trabalho02A.mod;
+data trabalho02.dat;
+
+option solver gurobi;
+
+solve;
+
+printf "\n" >trabalho02A.sol;
+printf "*** minimizing total cost ***\n" >trabalho02A.sol;
+printf "DC cost: %g euros\n",  DTotalCost >trabalho02A.sol;
+printf "Total cost: %.8g euros\n", tcost >trabalho02A.sol;
+printf "Quantity of dc open:%g\n" ,sum{i in N} dc_open[i] >trabalho02A.sol; 
+for {i in N} {
+	if dc_open[i] == 1 then {
+	printf "DC Location:%s 	(%g,%g) \n", i ,lat[i], lng[i] >trabalho02A.sol;
+}
+}
+
+for {i in N} {
+ 	if dc_open[i] == 1 then {
+ 	printf "\n******   DC %s with delivery cost: %i serves    ********\n", i, sum{j in N} c[j]*d[i,j]*dc_serving_city[i,j] >trabalho02A.sol;
+	}
+	for {j in N} {
+		if dc_serving_city[i,j] == 1 then {
+		printf "%s, \n" , j >trabalho02A.sol; 			
+		#printf "distance: %g km\n" ,d[j,i];
+		#printf "cost: %g euros\n\n" ,c[j]*d[i,j]*dc_serving_city[i,j];
+		}
+	}
+	if dc_open[i] == 1 then {
+ 	printf "\n************************************\n" >trabalho02A.sol;
+	}
+}
+
+param _maxvalue default -100;
+param citymax symbolic in N;
+param dcmax symbolic in N;
+
+for {i in N} {
+	for {j in N} {
+		if (_maxvalue < (d[i,j]*dc_serving_city[i,j]*c[j]*dc_open[i])) then {		
+			let _maxvalue :=  (d[i,j]*dc_serving_city[i,j]*c[j]*dc_open[i]);
+			let citymax:= j;
+			let dcmax := i;
+		}
+	}
+}
+printf "Max cost of delivery: %s --> %s with value: %g euros\n\n", dcmax, citymax , _maxvalue >trabalho02A.sol;

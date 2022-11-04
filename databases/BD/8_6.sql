@@ -1,0 +1,1 @@
+select name, avg(H) from (select name,count(actor_id) AS H from category left join film on category.category_id=film.category_id LEFT JOIN film_actor on film.film_id=film_actor.film_id group by film.film_id order by 2 ASC) T group by name;

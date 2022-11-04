@@ -1,0 +1,167 @@
+package sonc.game;
+ 
+import java.io.File;
+import java.util.List;
+
+import sonc.shared.SoncException;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+ 
+public class Manager implements Serializable {
+    /**
+    * class variables definition
+    */
+    private static final long serialVersionUID = 1L;
+    Players allPlayers;
+    static Manager instance = null;
+    static File store = new File("manager.ser");
+   
+    /**
+     * Create an instance of Manager to control all players
+     */
+    private Manager() {
+        allPlayers = new Players();
+        //instance = null;
+    }
+   
+    /**
+     *
+     * ----USER VERIFICATION----
+     */
+ 
+     public boolean authenticate(String nick, String password) {
+        return allPlayers.authenticate(nick, password);
+    }
+   
+    public boolean register(String userId, String password) throws SoncException {
+    	if(allPlayers.register(userId, password)) {
+            //backup();
+            return true;
+        }
+        return false;
+    }
+ 
+    public boolean updatePassword(String nick, String oldPassword, String newPassword) throws SoncException {
+        if(allPlayers.updatePassword(nick, oldPassword, newPassword)) {
+            //restore();
+            return true;
+        }
+        return false;
+    }
+ 
+    public void buildShip(String nick, String password, String code) throws SoncException {
+        Player currentPlayer = allPlayers.getPlayer(nick);
+        if(currentPlayer.authenticate(password)) {
+        	currentPlayer.checkCode();
+            currentPlayer.setCode(code);
+        }
+        else
+            throw new SoncException();
+    }
+ 
+    public String getCurrentCode(String nick, String password) throws SoncException {
+        Player currentPlayer = allPlayers.getPlayer(nick);
+        if(currentPlayer.authenticate(password))
+            return currentPlayer.getCode();
+        else
+            throw new SoncException();
+    }
+ 
+    /**
+     *----GETTERS----
+     *
+     */
+    public static File getPlayersFile() {
+        return store;
+    }
+ 
+    public static Manager getInstance() throws SoncException {
+    	/*
+        if(instance != null) {
+            return instance;
+        }
+        else {
+            try{
+            	instance = new Manager();
+                instance = restore();
+                return instance;
+            }
+            catch(Exception e) {
+                throw new SoncException();
+            }
+        }*/
+    	if(instance == null) { instance = new Manager(); /*instance = restore();*/ }
+    	
+    	return instance;
+    }
+ 
+    List<String> getPlayersNamesWithShips() {
+        return allPlayers.getPlayersNamesWithShips();
+    }
+ 
+    /**
+    * ---- SETTERS ----
+    *
+    */
+    public static void setPlayersFile(File managerFile) {
+        store = managerFile;
+    }
+ 
+    /*
+    public Movie battle(List<String> nicks) {
+        World currentWorld = new World();
+       
+        List<Ship> ships = new LinkedList<Ship>();
+       
+        for(String name : getPlayersNamesWithShips()) {
+            ships.add(allPlayers.getPlayer(name).instanceShip());
+        }
+       
+        return currentWorld.battle(ships);
+    }
+ */
+ 
+    /**
+    *
+    * This method reset an instance Manager
+    */
+    static void reset() {
+        instance = new Manager();
+    }
+ 
+ 
+    /*
+    * ---- FILE AND OBJECT STREAMS ----
+    */
+    void backup() throws SoncException {
+        try {
+            FileOutputStream fileStream = new FileOutputStream(store);
+            ObjectOutputStream serializer = new ObjectOutputStream(fileStream);
+            serializer.writeObject(instance);
+            serializer.close();
+        }
+        catch(Exception e) {
+            throw new SoncException(e);
+        }
+    }
+ 
+    static Manager restore() throws SoncException {
+        Manager manager = null;
+        try {
+            FileInputStream fileStream = new FileInputStream(store);
+            ObjectInputStream deserializer = new ObjectInputStream(fileStream);
+            manager = (Manager) deserializer.readObject();
+            deserializer.close();
+        }
+        catch(Exception e) {
+            throw new SoncException(e);
+        }
+       
+        return manager;
+       
+    }
+}

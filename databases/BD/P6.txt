@@ -1,0 +1,45 @@
+Para abrir: 
+command line: mysql -u root -p
+mysql:use dvd
+mysql:source dvd.sql
+
+1)
+select name from category where name like 'S%';
+
+2)
+select first_name, last_name from actor order by 1,2;
+
+3)
+select title from film, inventory, rental where
+       film.film_id=inventory.film_id and
+       inventory.inventory_id=rental.inventory_id and
+       customer_id=258 order by 1;
+
+4)
+select title from film, film_actor, actor where
+    film.film_id = film_actor.film_id and
+    film_actor.actor_id = actor.actor_id and
+    actor.first_name='HARRISON' and actor.last_name='BALE';
+
+5)
+select distinct first_name, last_name from customer, rental where customer.customer_id = rental.customer_id and rental.return_date is null;
+//falta order
+
+6)
+select E.first_name, E.last_name, A.first_name, A.last_name from
+    staff E, staff A, store where
+    E.store_id=store.store_id and
+    store.manager=A.staff_id;
+
+7)
+select first_name, last_name from actor where actor_id in (select distinct actor_id from film_actor where film_id in(select film_id from film where category_id in(select category_id from category where name ="DRAMA"))) order by 1,2;
+
+//soluçao nao funciona por haver 2 susan davis
+select first_name, last_name from actor, film_actor, film, category where actor.actor_id=film_actor.actor_id and film_actor.film_id = film.film_id and film.category_id = category.category_id and category.name='DRAMA';
+//falta order e mostrar 2 SUSAN DAVIS
+
+8)
+update customer
+    set phone='351212212212' where 
+    first_name='KAREN' and
+    last_name='JACKSON';

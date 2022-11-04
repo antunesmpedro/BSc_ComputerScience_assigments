@@ -1,0 +1,5 @@
+select first_name, last_name from actor, film_actor, film
+       where film.title="WYOMING STORM" and
+       	     film.film_id=film_actor.film_id and
+	     film_actor.actor_id=actor.actor_id
+		order 1,2;

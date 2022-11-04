@@ -1,0 +1,2 @@
+serviceClass: sonc.client.SoncService
+path: C258A4D50E01C825059DADFEEA923A80.gwt.rpc
